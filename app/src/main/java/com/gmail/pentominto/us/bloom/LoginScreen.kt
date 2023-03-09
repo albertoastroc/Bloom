@@ -104,7 +104,7 @@ fun LoginScreen(
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { onLoginClick() },
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxWidth()
