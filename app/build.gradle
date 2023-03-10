@@ -67,4 +67,8 @@ dependencies {
     //Accompanist, system bar adjuster
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.26.2-beta"
 
+    implementation 'androidx.compose.material:material:1.3.1'
+
+    implementation 'com.github.bumptech.glide:compose:1.0.0-alpha.1'
+
 }

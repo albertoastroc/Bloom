@@ -29,13 +29,13 @@ fun LoginScreen(
     ) {
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
 
             Text(
                 text = "Log in with email",
                 modifier = Modifier.paddingFromBaseline(
-                    top = 184.dp,
                     bottom = 8.dp
                 ),
                 style = MaterialTheme.typography.h1
