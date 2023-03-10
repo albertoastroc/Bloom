@@ -2,7 +2,6 @@
 
 package com.gmail.pentominto.us.bloom
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,8 +27,6 @@ import com.gmail.pentominto.us.bloom.ui.theme.White
 @Composable
 fun HomeScreen() {
 
-    var searchState by remember { mutableStateOf("") }
-
     val themesList = listOf<Pair<Int, String>>(
         R.drawable.jungle_vibes to "Jungle vibes",
         R.drawable.desert_chic to "Desert chic",
@@ -38,7 +35,7 @@ fun HomeScreen() {
         R.drawable.tiny_terrariums to "Tiny terrariums"
     )
 
-    //Added the list twice to see scrolling
+    //Added themes items to have enough to scroll
     val plantsList = listOf<Pair<Int, String>>(
         R.drawable.aglaonema to "Aglaonema",
         R.drawable.fiddle_leaf to "Fiddle Leaf",
@@ -55,14 +52,18 @@ fun HomeScreen() {
 
     val bottomNavChoices = listOf<Pair<ImageVector, String>>(
         Icons.Filled.Home to "Home",
-        Icons.Filled.Favorite to "Favorite",
-        Icons.Filled.Person to "Person",
+        Icons.Filled.FavoriteBorder to "Favorites",
+        Icons.Filled.AccountCircle to "Profile",
         Icons.Filled.ShoppingCart to "Cart",
     )
 
     Scaffold(
         bottomBar = {
-            BottomNavigation {
+
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colors.primary,
+                elevation = 16.dp
+            ) {
 
                 bottomNavChoices.forEach { icon ->
 
@@ -75,11 +76,12 @@ fun HomeScreen() {
 
         Surface(
             modifier = Modifier.padding(padding),
+            color = MaterialTheme.colors.background
         ) {
 
             Column() {
 
-                SearchBar(searchState)
+                SearchBar()
 
                 ThemesRow(themesList)
 
@@ -97,19 +99,120 @@ private fun RowScope.BottomNavItem(icons : Pair<ImageVector, String>) {
 
     BottomNavigationItem(
         selected = selected,
-        onClick = {  },
+        onClick = { },
         icon = {
             Icon(
                 imageVector = icons.first,
                 contentDescription = "Home",
             )
         },
-        label = { Text(text = icons.second) }
+        label = { Text(
+            text = icons.second,
+            style = MaterialTheme.typography.caption
+        ) },
     )
 }
 
 @Composable
 private fun PlantsList(plantsList : List<Pair<Int, String>>) {
+
+    PlantsHeader()
+
+    PlantsColumn(plantsList)
+}
+
+@Composable
+private fun PlantsColumn(plantsList : List<Pair<Int, String>>) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(
+                start = 16.dp,
+                end = 16.dp
+            ),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+
+        items(plantsList) { item ->
+
+            val isChecked = remember { mutableStateOf(false) }
+
+            PlantsColumnRow(
+                item,
+                isChecked
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlantsColumnRow(item : Pair<Int, String>, isChecked : MutableState<Boolean>) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+
+        GlideImage(
+            model = item.first,
+            contentScale = ContentScale.FillBounds,
+            contentDescription = "plant image",
+            modifier = Modifier
+                .height(64.dp)
+                .width(64.dp)
+        )
+
+        Column {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+                Column(
+
+                    modifier = Modifier
+                        .padding(start = 16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+
+                    Text(
+                        text = item.second,
+                        style = MaterialTheme.typography.h2
+                    )
+                    Text(
+                        text = "This is a description",
+                        style = MaterialTheme.typography.body1
+                    )
+                }
+
+                Checkbox(
+                    checked = isChecked.value,
+                    onCheckedChange = { isChecked.value = it },
+                    modifier = Modifier.offset(x = 12.dp),
+                    colors = CheckboxDefaults.colors(
+                     checkmarkColor = MaterialTheme.colors.background
+                    )
+
+                    )
+            }
+
+            Divider(
+                color = MaterialTheme.colors.onBackground,
+                thickness = 1.dp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun PlantsHeader() {
 
     Row(
         modifier = Modifier
@@ -134,77 +237,11 @@ private fun PlantsList(plantsList : List<Pair<Int, String>>) {
             contentDescription = "Sort button"
         )
     }
-
-    LazyColumn(
-        modifier = Modifier
-            .padding(
-                start = 16.dp,
-                end = 16.dp
-            ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-
-        items(plantsList) { item ->
-
-            val isChecked = remember { mutableStateOf(false) }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-
-                GlideImage(model = item.first,
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = "plant image",
-                    modifier = Modifier
-                        .height(64.dp)
-                        .width(64.dp)
-                )
-
-                Column {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(64.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-
-                        Column(
-
-                            modifier = Modifier
-                                .padding(start = 16.dp),
-                            horizontalAlignment = Alignment.Start
-                        ) {
-
-                            Text(text = item.second)
-                            Text(text = "This is a description")
-                        }
-
-                        Checkbox(
-                            checked = isChecked.value,
-                            onCheckedChange = { isChecked.value = it },
-                            modifier = Modifier.offset(x = 12.dp)
-                        )
-                    }
-
-                    Divider(
-                        color = Color.Black,
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-
-            }
-        }
-    }
 }
 
 @Composable
 private fun ThemesRow(themesList : List<Pair<Int, String>>) {
+
     Text(
         text = "Browse themes",
         modifier = Modifier
@@ -213,7 +250,14 @@ private fun ThemesRow(themesList : List<Pair<Int, String>>) {
                 bottom = 16.dp
             )
             .padding(horizontal = 16.dp),
+        style = MaterialTheme.typography.h1
     )
+
+    ThemesRowItem(themesList)
+}
+
+@Composable
+private fun ThemesRowItem(themesList : List<Pair<Int, String>>) {
 
     LazyRow(
         modifier = Modifier.height(136.dp),
@@ -224,7 +268,8 @@ private fun ThemesRow(themesList : List<Pair<Int, String>>) {
         items(themesList) { item ->
 
             Card(
-                shape = Shapes.small
+                shape = Shapes.small,
+                elevation = 4.dp
             ) {
 
                 Column() {
@@ -239,13 +284,14 @@ private fun ThemesRow(themesList : List<Pair<Int, String>>) {
                     )
                     Box(
                         modifier = Modifier
-                            .background(White)
+                            .background(MaterialTheme.colors.surface)
                             .width(128.dp)
                             .height(40.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = item.second
+                            text = item.second,
+                            style = MaterialTheme.typography.h2
                         )
                     }
 
@@ -256,10 +302,12 @@ private fun ThemesRow(themesList : List<Pair<Int, String>>) {
 }
 
 @Composable
-private fun SearchBar(searchState : String) {
-    var searchState1 = searchState
+private fun SearchBar() {
+
+    var searchState by remember { mutableStateOf("") }
+
     OutlinedTextField(
-        value = searchState1,
+        value = searchState,
         modifier = Modifier
             .fillMaxWidth()
             .padding(
@@ -267,13 +315,13 @@ private fun SearchBar(searchState : String) {
                 end = 16.dp,
                 top = 16.dp
             ),
-        onValueChange = { searchState1 = it },
+        onValueChange = { searchState = it },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Color.Gray,
+            textColor = MaterialTheme.colors.onBackground,
             disabledTextColor = Color.Transparent,
-            backgroundColor = Color.White,
-            focusedBorderColor = Gray,
-            unfocusedBorderColor = Gray,
+            backgroundColor = MaterialTheme.colors.background,
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = MaterialTheme.colors.onBackground,
         ),
         leadingIcon = {
             Icon(

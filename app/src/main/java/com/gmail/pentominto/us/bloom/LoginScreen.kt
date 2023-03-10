@@ -33,99 +33,126 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(
-                text = "Log in with email",
-                modifier = Modifier.paddingFromBaseline(
-                    bottom = 8.dp
-                ),
-                style = MaterialTheme.typography.h1
-            )
+            LoginHeader()
 
-            OutlinedTextField(
-                value = emailState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                onValueChange = { emailState = it },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = Color.Gray,
-                    disabledTextColor = Color.Transparent,
-                    backgroundColor = Color.White,
-                    focusedBorderColor = Gray,
-                    unfocusedBorderColor = Gray,
-                ),
-                placeholder = {
-                    Text(
-                        text = "Email address",
-                        style = MaterialTheme.typography.body1
-                    )
-                }
-            )
+            EmailTextField(emailState)
 
-            OutlinedTextField(
-                value = passwordState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                onValueChange = { passwordState = it },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = Color.Gray,
-                    disabledTextColor = Color.Transparent,
-                    backgroundColor = Color.White,
-                    focusedBorderColor = Gray,
-                    unfocusedBorderColor = Gray,
-                ),
-                placeholder = {
-                    Text(
-                        text = "Password (8+ characters)",
-                        style = MaterialTheme.typography.body1
-                    )
-                }
-            )
+            PasswordTextField(passwordState)
 
-            Text(
-                text = "By clicking below, you agree to our Terms of Use and consent to our Privacy Policy.",
-                modifier = Modifier
-                    .paddingFromBaseline(
-                        top = 24.dp,
-                        bottom = 16.dp
-                    )
-                    .padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.body2,
-                textAlign = TextAlign.Center
-            )
+            TOUMessage()
 
-            Button(
-                onClick = { onLoginClick() },
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxWidth()
-                    .padding(
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    contentColor = MaterialTheme.colors.onSecondary
-                ),
-                shape = Shapes.medium
-            )
-            {
-
-                Text(
-                    text = "Log in",
-                    modifier = Modifier
-                )
-            }
+            LoginButton(onLoginClick)
         }
+    }
+}
+
+@Composable
+private fun LoginHeader() {
+    Text(
+        text = "Log in with email",
+        modifier = Modifier.paddingFromBaseline(
+            bottom = 16.dp
+        ),
+        style = MaterialTheme.typography.h1
+    )
+}
+
+@Composable
+private fun TOUMessage() {
+    Text(
+        text = "By clicking below, you agree to our Terms of Use and consent to our Privacy Policy.",
+        modifier = Modifier
+            .paddingFromBaseline(
+                top = 24.dp,
+                bottom = 16.dp
+            )
+            .padding(horizontal = 16.dp),
+        style = MaterialTheme.typography.body2,
+        textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+private fun EmailTextField(emailState : String) {
+    var emailState1 = emailState
+    OutlinedTextField(
+        value = emailState1,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                bottom = 8.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+        onValueChange = { emailState1 = it },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = MaterialTheme.colors.onBackground,
+            disabledTextColor = Color.Transparent,
+            backgroundColor = MaterialTheme.colors.background,
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = MaterialTheme.colors.onBackground,
+        ),
+        placeholder = {
+            Text(
+                text = "Email address",
+                style = MaterialTheme.typography.body1
+            )
+        }
+    )
+}
+
+@Composable
+private fun PasswordTextField(passwordState : String) {
+    var passwordState1 = passwordState
+    OutlinedTextField(
+        value = passwordState1,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                bottom = 8.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+        onValueChange = { passwordState1 = it },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = MaterialTheme.colors.onBackground,
+            disabledTextColor = Color.Transparent,
+            backgroundColor = MaterialTheme.colors.background,
+            focusedBorderColor = MaterialTheme.colors.onBackground,
+            unfocusedBorderColor = MaterialTheme.colors.onBackground,
+        ),
+        placeholder = {
+            Text(
+                text = "Password (8+ characters)",
+                style = MaterialTheme.typography.body1
+            )
+        }
+    )
+}
+
+@Composable
+private fun LoginButton(onLoginClick : () -> Unit) {
+    Button(
+        onClick = { onLoginClick() },
+        modifier = Modifier
+            .height(48.dp)
+            .fillMaxWidth()
+            .padding(
+                bottom = 8.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.secondary,
+            contentColor = MaterialTheme.colors.onSecondary
+        ),
+        shape = Shapes.medium
+    )
+    {
+
+        Text(
+            text = "Log in",
+            modifier = Modifier
+        )
     }
 }
